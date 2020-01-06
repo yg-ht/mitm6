@@ -135,7 +135,8 @@ def send_dhcp_advertise(p, basep, target):
     resp = Ether(dst=basep.src)/IPv6(src=config.selfaddr, dst=basep[IPv6].src)/UDP(sport=547, dport=546) #base packet
     resp /= DHCP6_Advertise(trid=p.trid)
     #resp /= DHCP6OptPref(prefval = 255)
-    resp /= DHCP6OptClientId(duid=p[DHCP6OptClientId].duid)
+    if (DHCP6OptClientId in p):
+        resp /= DHCP6OptClientId(duid=p[DHCP6OptClientId].duid)
     resp /= DHCP6OptServerId(duid=config.selfduid)
     resp /= DHCP6OptDNSServers(dnsservers=[config.selfaddr])
     if config.localdomain:
